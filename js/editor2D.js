@@ -1,61 +1,129 @@
+const SCALE = 40;
+
 export class Editor2D {
 
-    constructor(canvas, model) {
+    constructor(containerId, model) {
 
         this.model = model;
 
+        const container = document.getElementById(containerId);
+
         this.stage = new Konva.Stage({
-
-            container: canvas.parentElement,
-            width: canvas.parentElement.clientWidth,
-            height: canvas.parentElement.clientHeight
-
+            container: containerId,
+            width: container.clientWidth,
+            height: container.clientHeight
         });
 
-        this.layer = new Konva.Layer();
+        this.gridLayer = new Konva.Layer();
+        this.objectLayer = new Konva.Layer();
 
-        this.stage.add(this.layer);
+        this.stage.add(this.gridLayer);
+        this.stage.add(this.objectLayer);
+
+        this.drawGrid();
+    }
+
+    drawGrid() {
+
+        const w = this.stage.width();
+        const h = this.stage.height();
+
+        for (let x = 0; x <= w; x += SCALE) {
+
+            this.gridLayer.add(new Konva.Line({
+                points: [x, 0, x, h],
+                stroke: "#dddddd",
+                strokeWidth: 1
+            }));
+
+        }
+
+        for (let y = 0; y <= h; y += SCALE) {
+
+            this.gridLayer.add(new Konva.Line({
+                points: [0, y, w, y],
+                stroke: "#dddddd",
+                strokeWidth: 1
+            }));
+
+        }
+
+        this.gridLayer.draw();
 
     }
 
     draw() {
 
-        this.layer.destroyChildren();
+        this.objectLayer.destroyChildren();
 
-        this.model.getAll().forEach(object => {
+        this.model.getAll().forEach(obj => {
 
-            const rect = new Konva.Rect({
+            const color = obj.floor === 2
+                ? "#99bbff"
+                : "#d0d0d0";
 
-                x: object.x * 40,
+            const group = new Konva.Group({
 
-                y: object.y * 40,
-
-                width: object.width * 40,
-
-                height: object.depth * 40,
-
-                fill: object.floor == 1
-                    ? "rgba(80,120,255,0.4)"
-                    : "rgba(180,180,180,0.5)",
-
-                stroke: "black",
-
+                x: obj.x * SCALE,
+                y: obj.y * SCALE,
                 draggable: true
 
             });
 
-            rect.on("dragend", () => {
+            const rect = new Konva.Rect({
 
-                object.x = rect.x() / 40;
-                object.y = rect.y() / 40;
+                width: obj.width * SCALE,
+                height: obj.depth * SCALE,
+
+                fill: color,
+
+                stroke: "black",
+                strokeWidth: 2
 
             });
 
-            this.layer.add(rect);
+            const text = new Konva.Text({
+
+                text: obj.id,
+
+                width: obj.width * SCALE,
+
+                height: obj.depth * SCALE,
+
+                align: "center",
+
+                verticalAlign: "middle",
+
+                fontSize: 18
+
+            });
+
+            group.add(rect);
+            group.add(text);
+
+            group.on("dragend", () => {
+
+                obj.x = Math.round(group.x() / SCALE * 2) / 2;
+                obj.y = Math.round(group.y() / SCALE * 2) / 2;
+
+            });
+
+            group.on("click", () => {
+
+                document.getElementById("id").value = obj.id;
+                document.getElementById("x").value = obj.x;
+                document.getElementById("y").value = obj.y;
+                document.getElementById("width").value = obj.width;
+                document.getElementById("depth").value = obj.depth;
+                document.getElementById("height").value = obj.height;
+
+            });
+
+            this.objectLayer.add(group);
 
         });
 
-        this.layer.draw();
+        this.objectLayer.draw();
 
     }
 

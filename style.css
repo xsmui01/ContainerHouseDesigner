@@ -72,11 +72,7 @@ button{
 }
 
 #canvas{
-
     flex:1;
-
     background:white;
-
-    cursor:crosshair;
-
+    overflow:hidden;
 }

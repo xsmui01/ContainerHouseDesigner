@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>Container House Designer</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div id="toolbar">
+
+    <button id="btnNew">Nový</button>
+    <button id="btnOpen">Načíst</button>
+    <button id="btnSave">Uložit</button>
+
+    <span class="separator"></span>
+
+    <button id="btn2D">2D</button>
+    <button id="btn3D" disabled>3D</button>
+
+</div>
+
+
+<div id="workspace">
+
+    <div id="leftPanel">
+
+        <h2>Objekt</h2>
+
+        <label>ID</label>
+        <input id="id" readonly>
+
+        <label>X</label>
+        <input id="x" type="number" step="0.5">
+
+        <label>Y</label>
+        <input id="y" type="number" step="0.5">
+
+        <label>Width</label>
+        <input id="width" type="number" step="0.5">
+
+        <label>Depth</label>
+        <input id="depth" type="number" step="0.5">
+
+        <label>Height</label>
+        <input id="height" type="number" step="0.1">
+
+        <button id="btnApply">
+
+            Použít
+
+        </button>
+
+    </div>
+
+
+    <canvas id="canvas"></canvas>
+
+</div>
+
+<script type="module" src="app.js"></script>
+
+</body>
+
+</html>

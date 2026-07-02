@@ -3,11 +3,20 @@ import { Editor2D } from "./js/editor2d.js";
 
 const model = new Model();
 
-const editor = new Editor2D(
+fetch("./data/demo.json")
+    .then(r => r.json())
+    .then(data => {
 
-    document.getElementById("canvas"),
-    model
+        model.load(data);
 
-);
+        const editor = new Editor2D(
 
-editor.draw();
+            document.getElementById("canvas"),
+
+            model
+
+        );
+
+        editor.draw();
+
+    });

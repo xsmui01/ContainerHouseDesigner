@@ -3,65 +3,49 @@ import { Editor2D } from "./js/editor2d.js";
 
 const model = new Model();
 
-fetch("./data/demo.json")
-    .then(r => r.json())
-    .then(data => {
+const editor = new Editor2D("canvas", model);
 
-        // převod starého formátu
+document
+    .getElementById("btnImport")
+    .addEventListener("click", () => {
 
-        data.forEach(o => {
+        document
+            .getElementById("fileInput")
+            .click();
 
-            if (o.floor === undefined) {
+    });
 
-                o.floor = o.z + 1;
+document
+    .getElementById("fileInput")
+    .addEventListener("change", event => {
 
-            }
+        const file = event.target.files[0];
 
-            if (o.width === undefined) {
+        if (!file) return;
 
-                o.width = o.w;
+        const reader = new FileReader();
 
-            }
+        reader.onload = e => {
 
-            if (o.depth === undefined) {
+            const data = JSON.parse(e.target.result);
 
-                o.depth = o.h;
+            data.forEach(o => {
 
-            }
+                if (o.width === undefined) o.width = o.w;
+                if (o.depth === undefined) o.depth = o.h;
+                if (o.height === undefined) o.height = o.v;
 
-            if (o.height === undefined) {
+                if (o.floor === undefined)
+                    o.floor = o.z + 1;
 
-                o.height = o.v;
+            });
 
-            }
+            model.load(data);
 
-        });
+            editor.draw();
 
-        model.load(data);
+        };
 
-        const editor = new Editor2D("canvas", model);
-
-        editor.draw();
-
-    });import { Model } from "./js/model.js";
-import { Editor2D } from "./js/editor2d.js";
-
-const model = new Model();
-
-fetch("./data/demo.json")
-    .then(r => r.json())
-    .then(data => {
-
-        model.load(data);
-
-        const editor = new Editor2D(
-
-            document.getElementById("canvas"),
-
-            model
-
-        );
-
-        editor.draw();
+        reader.readAsText(file);
 
     });

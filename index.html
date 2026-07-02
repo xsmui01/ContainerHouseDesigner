@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="cs">
+
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Container House Designer</title>
 
@@ -13,59 +14,67 @@
 
 <body>
 
-<div id="toolbar">
+    <div id="toolbar">
 
-    <button id="btnNew">Nový</button>
-    <button id="btnOpen">Načíst</button>
-    <button id="btnSave">Uložit</button>
+        <button id="btnNew">Nový</button>
 
-    <span class="separator"></span>
+        <button id="btnImport">Import JSON</button>
 
-    <button id="btn2D">2D</button>
-    <button id="btn3D" disabled>3D</button>
+        <button id="btnSave">Export JSON</button>
 
-</div>
+        <span class="separator"></span>
 
+        <button id="btn2D">2D</button>
 
-<div id="workspace">
-
-    <div id="leftPanel">
-
-        <h2>Objekt</h2>
-
-        <label>ID</label>
-        <input id="id" readonly>
-
-        <label>X</label>
-        <input id="x" type="number" step="0.5">
-
-        <label>Y</label>
-        <input id="y" type="number" step="0.5">
-
-        <label>Width</label>
-        <input id="width" type="number" step="0.5">
-
-        <label>Depth</label>
-        <input id="depth" type="number" step="0.5">
-
-        <label>Height</label>
-        <input id="height" type="number" step="0.1">
-
-        <button id="btnApply">
-
-            Použít
-
-        </button>
+        <button id="btn3D" disabled>3D</button>
 
     </div>
 
 
-    <div id="canvas"></div>8
+    <div id="workspace">
 
-</div>
+        <div id="leftPanel">
 
-<script src="https://unpkg.com/konva@9/konva.min.js"></script>
-<script type="module" src="app.js"></script>
+            <h2>Vybraný objekt</h2>
+
+            <label>ID</label>
+            <input id="id" readonly>
+
+            <label>X</label>
+            <input id="x" type="number" step="0.5">
+
+            <label>Y</label>
+            <input id="y" type="number" step="0.5">
+
+            <label>Šířka</label>
+            <input id="width" type="number" step="0.5">
+
+            <label>Hloubka</label>
+            <input id="depth" type="number" step="0.5">
+
+            <label>Výška</label>
+            <input id="height" type="number" step="0.1">
+
+            <button id="btnApply">Použít</button>
+
+        </div>
+
+        <div id="canvas"></div>
+
+    </div>
+
+
+    <input
+        type="file"
+        id="fileInput"
+        accept=".json"
+        hidden
+    >
+
+
+    <script src="https://unpkg.com/konva@9/konva.min.js"></script>
+
+    <script type="module" src="app.js"></script>
 
 </body>
 

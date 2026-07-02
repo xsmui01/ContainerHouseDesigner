@@ -6,12 +6,16 @@ export class Editor2D {
 
         this.model = model;
 
-        const container = document.getElementById(containerId);
+        const div = document.getElementById(containerId);
 
         this.stage = new Konva.Stage({
+
             container: containerId,
-            width: container.clientWidth,
-            height: container.clientHeight
+
+            width: div.clientWidth,
+
+            height: div.clientHeight
+
         });
 
         this.gridLayer = new Konva.Layer();
@@ -21,30 +25,42 @@ export class Editor2D {
         this.stage.add(this.objectLayer);
 
         this.drawGrid();
+
     }
 
     drawGrid() {
 
-        const w = this.stage.width();
-        const h = this.stage.height();
+        this.gridLayer.destroyChildren();
 
-        for (let x = 0; x <= w; x += SCALE) {
+        for (let x = 0; x < this.stage.width(); x += SCALE) {
 
-            this.gridLayer.add(new Konva.Line({
-                points: [x, 0, x, h],
-                stroke: "#dddddd",
-                strokeWidth: 1
-            }));
+            this.gridLayer.add(
+
+                new Konva.Line({
+
+                    points: [x,0,x,this.stage.height()],
+
+                    stroke:"#dddddd"
+
+                })
+
+            );
 
         }
 
-        for (let y = 0; y <= h; y += SCALE) {
+        for (let y = 0; y < this.stage.height(); y += SCALE) {
 
-            this.gridLayer.add(new Konva.Line({
-                points: [0, y, w, y],
-                stroke: "#dddddd",
-                strokeWidth: 1
-            }));
+            this.gridLayer.add(
+
+                new Konva.Line({
+
+                    points:[0,y,this.stage.width(),y],
+
+                    stroke:"#dddddd"
+
+                })
+
+            );
 
         }
 
@@ -58,68 +74,64 @@ export class Editor2D {
 
         this.model.getAll().forEach(obj => {
 
-            const color = obj.floor === 2
-                ? "#99bbff"
-                : "#d0d0d0";
-
-            const group = new Konva.Group({
+            const g = new Konva.Group({
 
                 x: obj.x * SCALE,
+
                 y: obj.y * SCALE,
-                draggable: true
+
+                draggable:true
 
             });
 
-            const rect = new Konva.Rect({
+            g.add(
 
-                width: obj.width * SCALE,
-                height: obj.depth * SCALE,
+                new Konva.Rect({
 
-                fill: color,
+                    width: obj.width * SCALE,
 
-                stroke: "black",
-                strokeWidth: 2
+                    height: obj.depth * SCALE,
 
-            });
+                    fill: obj.floor==2
+                        ? "#9ec5ff"
+                        : "#d8d8d8",
 
-            const text = new Konva.Text({
+                    stroke:"black",
 
-                text: obj.id,
+                    strokeWidth:2
 
-                width: obj.width * SCALE,
+                })
 
-                height: obj.depth * SCALE,
+            );
 
-                align: "center",
+            g.add(
 
-                verticalAlign: "middle",
+                new Konva.Text({
 
-                fontSize: 18
+                    width: obj.width*SCALE,
 
-            });
+                    height: obj.depth*SCALE,
 
-            group.add(rect);
-            group.add(text);
+                    text: obj.id,
 
-            group.on("dragend", () => {
+                    align:"center",
 
-                obj.x = Math.round(group.x() / SCALE * 2) / 2;
-                obj.y = Math.round(group.y() / SCALE * 2) / 2;
+                    verticalAlign:"middle",
 
-            });
+                    fontSize:18
 
-            group.on("click", () => {
+                })
 
-                document.getElementById("id").value = obj.id;
-                document.getElementById("x").value = obj.x;
-                document.getElementById("y").value = obj.y;
-                document.getElementById("width").value = obj.width;
-                document.getElementById("depth").value = obj.depth;
-                document.getElementById("height").value = obj.height;
+            );
+
+            g.on("dragend",()=>{
+
+                obj.x=Math.round(g.x()/20)/2;
+                obj.y=Math.round(g.y()/20)/2;
 
             });
 
-            this.objectLayer.add(group);
+            this.objectLayer.add(g);
 
         });
 
